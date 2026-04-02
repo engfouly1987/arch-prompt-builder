@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مولّد البرومبت المعماري</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-base: #0f0f0f;
+    --bg-card: #1a1a1a;
+    --bg-input: #242424;
+    --bg-input-hover: #2a2a2a;
+    --border: #2e2e2e;
+    --border-focus: #555;
+    --text-primary: #e8e8e8;
+    --text-secondary: #888;
+    --text-muted: #555;
+    --accent: #c8a96e;
+    --accent-dim: rgba(200,169,110,0.12);
+    --accent-dim2: rgba(200,169,110,0.06);
+    --success: #4caf7d;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-base);
+    color: var(--text-primary);
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-card);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .header h1 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .header-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+  .header-badge {
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text-secondary);
+  }
+
+  /* ── Layout ── */
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* ── Section ── */
+  .section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .section-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .section-header:hover { background: rgba(255,255,255,0.02); }
+  .section-icon { font-size: 15px; }
+  .section-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex: 1;
+  }
+  .section-chevron {
+    color: var(--text-muted);
+    font-size: 11px;
+    transition: transform 0.2s;
+  }
+  .section.collapsed .section-chevron { transform: rotate(-90deg); }
+  .section-body {
+    padding: 1.25rem;
+    display: grid;
+    gap: 12px;
+  }
+  .section.collapsed .section-body { display: none; }
+
+  /* ── Grid helpers ── */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .g1 { display: grid; grid-template-columns: 1fr; gap: 12px; }
+
+  @media (max-width: 600px) {
+    .g2, .g3 { grid-template-columns: 1fr; }
+  }
+
+  /* ── Field ── */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+  }
+  input[type=text], input[type=number], select, textarea {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    width: 100%;
+    transition: border-color 0.15s, background 0.15s;
+    outline: none;
+    direction: rtl;
+  }
+  input:hover, select:hover, textarea:hover { background: var(--bg-input-hover); }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--border-focus);
+    background: var(--bg-input-hover);
+  }
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 12px center;
+    padding-left: 32px;
+    cursor: pointer;
+  }
+  textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
+
+  /* ── Action bar ── */
+  .action-bar {
+    position: sticky;
+    bottom: 0;
+    background: var(--bg-base);
+    border-top: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .btn {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #111;
+    border-color: var(--accent);
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-secondary);
+  }
+  .btn-secondary:hover { background: var(--bg-card); color: var(--text-primary); }
+  .copy-success {
+    font-size: 12px;
+    color: var(--success);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .copy-success.show { opacity: 1; }
+
+  /* ── Output ── */
+  .output-wrap {
+    margin-top: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: none;
+  }
+  .output-wrap.visible { display: block; }
+  .output-header {
+    padding: 0.75rem 1.25rem;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .output-title {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .output-body {
+    padding: 1.25rem;
+    background: #111;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    color: #bbb;
+    white-space: pre-wrap;
+    word-break: break-word;
+    direction: rtl;
+    text-align: right;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #444; }
+
+  /* ── Divider ── */
+  .row-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 4px 0;
+  }
+
+  /* ── Info chip ── */
+  .info-chip {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--accent-dim2);
+    border: 1px solid rgba(200,169,110,0.15);
+    border-radius: 20px;
+    padding: 3px 10px;
+    display: inline-block;
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-logo">
+    <div class="logo-icon">🏛</div>
+    <div>
+      <div class="header h1" style="font-size:15px;font-weight:500;">مولّد البرومبت المعماري</div>
+      <div class="header-sub">Architectural Prompt Builder — v1.0</div>
+    </div>
+  </div>
+  <div class="header-badge">السكن الفاخر · الخليج العربي</div>
+</header>
+
+<div class="page">
+
+  <!-- Section 1: Site -->
+  <div class="section" id="sec1">
+    <div class="section-header" onclick="toggleSection('sec1')">
+      <span class="section-icon">📍</span>
+      <span class="section-title">بيانات الموقع</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="g3">
+        <div class="field"><label>الدولة</label><input type="text" id="country" value="المملكة العربية السعودية"></div>
+        <div class="field"><label>المدينة</label><input type="text" id="city" value="الرياض"></div>
+        <div class="field"><label>الحي</label><input type="text" id="district" value="حي الياسمين"></div>
+      </div>
+      <div class="g3">
+        <div class="field"><label>المساحة (م²)</label><input type="number" id="area" value="600"></div>
+        <div class="field"><label>الطول / العمق (م)</label><input type="number" id="depth" value="30"></div>
+        <div class="field"><label>العرض / الواجهة (م)</label><input type="number" id="width" value="20"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label>الواجهات</label><input type="text" id="facades" value="شمالية شرقية + شمالية غربية"></div>
+        <div class="field"><label>عرض الشوارع</label><input type="text" id="street_width" value="شارعان بعرض 20م لكل منهما"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Architecture -->
+  <div class="section" id="sec2">
+    <div class="section-header" onclick="toggleSection('sec2')">
+      <span class="section-icon">🏗️</span>
+      <span class="section-title">المواصفات المعمارية</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="g2">
+        <div class="field"><label>اسم صاحب المشروع</label><input type="text" id="owner" value="د. ابراهيم عبد الهادي"></div>
+        <div class="field"><label>الطراز المعماري</label><input type="text" id="style" value="هجين — عربي نجدي مع لمسات حديثة"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label>عدد الأدوار</label>
+          <select id="floors">
+            <option value="G+1+R" selected>دورين + ملحق سطح (G+1+R)</option>
+            <option value="G+2+R">3 أدوار + ملحق سطح (G+2+R)</option>
+            <option value="G+1">دورين فقط (G+1)</option>
+            <option value="G only">دور أرضي فقط</option>
+          </select>
+        </div>
+        <div class="field"><label>مصعد</label>
+          <select id="elevator">
+            <option value="يستمر لجميع الأدوار" selected>يستمر لجميع الأدوار</option>
+            <option value="لا يوجد">لا يوجد</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Ground Floor -->
+  <div class="section" id="sec3">
+    <div class="section-header" onclick="toggleSection('sec3')">
+      <span class="section-icon">🛋️</span>
+      <span class="section-title">متطلبات الدور الأرضي</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="g2">
+        <div class="field"><label>مجلس رجال</label>
+          <select id="mens">
+            <option value="مع مغاسل وحمام ومدخل مستقل وبوفيه" selected>مع مغاسل وحمام ومدخل مستقل وبوفيه</option>
+            <option value="مع مغاسل وحمام ومدخل مستقل">بدون بوفيه</option>
+            <option value="لا يوجد">لا يوجد</option>
+          </select>
+        </div>
+        <div class="field"><label>مجلس نساء</label>
+          <select id="womens">
+            <option value="مع مغاسل وحمام ومدخل مستقل" selected>مع مغاسل وحمام ومدخل مستقل</option>
+            <option value="لا يوجد">لا يوجد</option>
+          </select>
+        </div>
+      </div>
+      <div class="g3">
+        <div class="field"><label>غرف الخدمة</label>
+          <select id="service">
+            <option value="غرفة خادمة + حمام + غرفة سائق + حمام + غسيل" selected>كامل (خادمة + سائق + غسيل)</option>
+            <option value="غرفة خادمة + حمام + غسيل">بدون سائق</option>
+            <option value="غرفة غسيل فقط">غسيل فقط</option>
+          </select>
+        </div>
+        <div class="field"><label>كراج</label>
+          <select id="garage">
+            <option value="داخلي يتسع لسيارتين" selected>سيارتان</option>
+            <option value="داخلي يتسع لسيارة واحدة">سيارة واحدة</option>
+            <option value="داخلي يتسع لثلاث سيارات">3 سيارات</option>
+          </select>
+        </div>
+        <div class="field"><label>مكتب ومكتبة</label>
+          <select id="office">
+            <option value="مكتب مع مكتبة ملحقة" selected>نعم</option>
+            <option value="مكتب فقط">مكتب فقط</option>
+            <option value="لا يوجد">لا يوجد</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: First Floor -->
+  <div class="section" id="sec4">
+    <div class="section-header" onclick="toggleSection('sec4')">
+      <span class="section-icon">🛏️</span>
+      <span class="section-title">متطلبات الدور الأول</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="g3">
+        <div class="field"><label>عدد غرف النوم الإجمالي</label><input type="number" id="bedrooms" value="5" min="2" max="10"></div>
+        <div class="field"><label>أجنحة ماستر</label><input type="number" id="master" value="2" min="1" max="4"></div>
+        <div class="field"><label>غرف بحمامات مشتركة</label><input type="number" id="shared_bath" value="2" min="0" max="6"></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label>غرفة ألعاب أطفال</label>
+          <select id="playroom">
+            <option value="نعم" selected>نعم</option>
+            <option value="لا">لا</option>
+          </select>
+        </div>
+        <div class="field"><label>صالة عائلية علوية</label>
+          <select id="family_lounge">
+            <option value="نعم" selected>نعم</option>
+            <option value="لا">لا</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: Extra -->
+  <div class="section" id="sec5">
+    <div class="section-header" onclick="toggleSection('sec5')">
+      <span class="section-icon">⚙️</span>
+      <span class="section-title">ملاحظات خاصة</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="g1">
+        <div class="field">
+          <label>متطلبات إضافية أو اشتراطات خاصة</label>
+          <textarea id="extra">إمكانية التوسع المستقبلي أو تحويل إحدى الغرف الأرضية إلى جناح مستقل لكبار السن</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Output -->
+  <div class="output-wrap" id="output-wrap">
+    <div class="output-header">
+      <span class="output-title">البرومبت الجاهز للنسخ</span>
+      <span class="info-chip">جاهز للصق في Claude أو ChatGPT</span>
+    </div>
+    <div class="output-body" id="output"></div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- Sticky action bar -->
+<div class="action-bar">
+  <button class="btn btn-primary" onclick="generatePrompt()">
+    <span>توليد البرومبت</span>
+    <span>↗</span>
+  </button>
+  <button class="btn btn-secondary" onclick="copyPrompt()">
+    <span>نسخ النص</span>
+  </button>
+  <div class="copy-success" id="copy-badge">
+    <span>✓</span><span>تم النسخ</span>
+  </div>
+</div>
+
+<script>
+function toggleSection(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+function v(id) { return document.getElementById(id).value.trim(); }
+
+function generatePrompt() {
+  const owner       = v('owner');
+  const country     = v('country');
+  const city        = v('city');
+  const district    = v('district');
+  const area        = v('area');
+  const depth       = v('depth');
+  const width       = v('width');
+  const facades     = v('facades');
+  const streetWidth = v('street_width');
+  const archStyle   = v('style');
+  const floors      = v('floors');
+  const elevator    = v('elevator');
+  const mens        = v('mens');
+  const womens      = v('womens');
+  const service     = v('service');
+  const garage      = v('garage');
+  const office      = v('office');
+  const bedrooms    = v('bedrooms');
+  const master      = v('master');
+  const sharedBath  = v('shared_bath');
+  const playroom    = v('playroom');
+  const familyLounge= v('family_lounge');
+  const extra       = v('extra');
+
+  const prompt = `أنت كبير المصممين في مكتب معماري متخصص في السكن الفاخر في منطقة الخليج العربي.
+
+══════════════════════════════════════
+[ متغيرات المشروع — كل التعديلات هنا ]
+══════════════════════════════════════
+
+-- بيانات الموقع --
+OWNER_NAME     = "${owner}"
+COUNTRY        = "${country}"
+CITY           = "${city}"
+DISTRICT       = "${district}"
+PLOT_AREA      = "${area} م²"
+PLOT_DEPTH     = "${depth} م"
+PLOT_WIDTH     = "${width} م"
+PLOT_SHAPE     = "مستطيلة منتظمة"
+FACADES        = "${facades}"
+STREET_WIDTH   = "${streetWidth}"
+
+-- المواصفات المعمارية --
+ARCH_STYLE     = "${archStyle}"
+FLOORS         = "${floors}"
+ELEVATOR       = "${elevator}"
+
+-- برنامج الدور الأرضي --
+MENS_MAJLIS    = "${mens}"
+WOMENS_MAJLIS  = "${womens}"
+DINING_ROOM    = "غرفة طعام مستقلة تخدم كلا المجلسين والعائلة"
+FAMILY_HALL    = "صالة عائلية مركزية — تهوية متقاطعة + إطلالة على الفناء أو الحديقة — يمكن أن تكون مزدوجة الارتفاع"
+OFFICE         = "${office}"
+KITCHEN        = "مطبخ رئيسي مع مخزن"
+SERVICE_ROOMS  = "${service} — مدخل خدمة مستقل من الشارع"
+GARAGE         = "كراج ${garage}"
+GARDENS        = "حديقة أمامية وخلفية + جلسات خارجية منسقة"
+
+-- برنامج الدور الأول --
+TOTAL_BEDROOMS  = "${bedrooms} غرف نوم"
+MASTER_SUITES   = "${master} أجنحة ماستر (غرفة نوم + ملابس + حمام واسع)"
+SHARED_BATH_BR  = "${sharedBath} غرف بحمام مشترك"
+PLAYROOM        = "غرفة ألعاب: ${playroom}"
+FAMILY_LOUNGE   = "صالة عائلية علوية: ${familyLounge}"
+BED_ORIENTATION = "توجيه غرف النوم للجهة الشمالية الشرقية — حماية من شمس الغرب"
+
+-- ملحق السطح --
+ROOF_PROGRAM   = "فراغ متعدد الاستخدامات + Roof Garden/Terrace + جلسات مظللة بمظلات نجدية مطورة"
+
+-- أولويات التصميم --
+PRIVACY_LEVEL  = "عالٍ جداً"
+USAGE_MODE     = "سكن دائم + استقبال ضيوف بكثرة"
+CIRCULATION    = "فصل تام: حركة الضيوف / العائلة / الخدمة"
+EXTRA_NOTES    = "${extra}"
+
+══════════════════════════════════════
+[ محرك التصميم — لا تعدّل هذا القسم ]
+══════════════════════════════════════
+
+أولاً — التحليل الداخلي الصامت الإجباري:
+قبل رسم أي خط، نفّذ داخلياً وبصمت التحليل التالي وترجمه مباشرة إلى قرارات تصميمية مرئية في المخطط:
+- الموقع: شكل الأرض وأبعادها، توجيه الواجهات، أفضل نقاط الدخول للضيوف والعائلة والخدمة، الخصوصية البصرية مع الجيران.
+- المناخ: مسار الشمس، تأثير شمس العصر الغربية، اتجاه الرياح، فرص التهوية الطبيعية المتقاطعة (Cross Ventilation).
+- العمران: طبيعة حي الياسمين، الكثافة، القيمة السكنية.
+- الوظيفة: توزيع فراغي يحقق فصل الضيافة عن العائلة وتقليل التعرض الحراري لغرف النوم.
+
+ثانياً — قواعد الكتلة والإنشاء (MUST):
+- الكتلة منطقية وقابلة للبناء: لا زوايا حادة، لا غرف مثلثة، لا انكسارات غير مبررة.
+- تطابق الأدوار: الدور الأول امتداد مباشر للأرضي — أي نقص مبرر معمارياً فقط (تراس / فناء / فراغ مزدوج).
+- تطابق المحاور: الجدران والأعمدة تستمر بين الأدوار.
+- تطابق العناصر الرأسية: المصاعد والسلالم والحمامات في نفس المكان في كل الأدوار.
+- ثبات الارتدادات: منطقية وثابتة — عدم الانتظام يُمتص في الحدائق لا في الغرف.
+
+ثالثاً — المخرج النهائي — لوحة عرض واحدة:
+لوحة مخطط معماري احترافية واحدة تشمل:
+- [يسار] مخطط الدور الأرضي
+- [وسط] مخطط الدور الأول
+- [يمين] مخطط ملحق السطح + تنسيق الموقع
+
+مواصفات الإظهار:
+- أسلوب: CAD نظيف — Presentation Floor Plans كمخرجات المكاتب الهندسية الكبرى.
+- الأرضيات: تهشير (Hatching) خفيف واقعي يميز الفراغات.
+- الأثاث: بلوكات CAD قياسية في جميع الفراغات لإظهار المقياس والاستخدام.
+- الجدران: خارجية 25-30cm (Double Line)، داخلية 15-20cm.
+- الفتحات: أبواب بفتحاتها الكاملة، نوافذ بزجاجها (Double Line).
+- الأعمدة: نقاط سوداء مهشرة.
+- عنوان اللوحة: مشروع فيلا ${owner} — ${city} — ${district}.
+- عناوين الأدوار بالعربية + سهم الشمال + مقياس رسم بياني + أبعاد الأرض + الارتدادات النظامية.
+
+الناتج الوحيد المقبول: اللوحة المعمارية فقط — بدون مقدمة، بدون خاتمة، بدون شرح.`;
+
+  document.getElementById('output').textContent = prompt;
+  const wrap = document.getElementById('output-wrap');
+  wrap.classList.add('visible');
+  wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function copyPrompt() {
+  const text = document.getElementById('output').textContent;
+  if (!text) { generatePrompt(); return; }
+  navigator.clipboard.writeText(text).then(() => {
+    const badge = document.getElementById('copy-badge');
+    badge.classList.add('show');
+    setTimeout(() => badge.classList.remove('show'), 2000);
+  });
+}
+</script>
+</body>
+</html>
