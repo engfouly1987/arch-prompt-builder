@@ -3,610 +3,558 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مولّد البرومبت المعماري</title>
+<title>مولّد برومبت الفيلا | AF4AI</title>
+<meta name="description" content="مولّد برومبت لوحة مساقط فيلا سكنية فاخرة — من AF4AI">
+<meta name="theme-color" content="#0e0c0a">
+<link rel="icon" href="https://af4ai.com/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg-base: #0f0f0f;
-    --bg-card: #1a1a1a;
-    --bg-input: #242424;
-    --bg-input-hover: #2a2a2a;
-    --border: #2e2e2e;
-    --border-focus: #555;
-    --text-primary: #e8e8e8;
-    --text-secondary: #888;
-    --text-muted: #555;
-    --accent: #c8a96e;
-    --accent-dim: rgba(200,169,110,0.12);
-    --accent-dim2: rgba(200,169,110,0.06);
-    --success: #4caf7d;
-    --radius: 10px;
-    --radius-sm: 6px;
+/* ── AF4AI brand tokens (ink palette, mirrors af4ai.com) ── */
+:root{
+  --r-xl:22px;--r:16px;--r-sm:10px;
+  --font:"IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --bg:#f6f5f2;--surface:#fff;--surface-2:#efede8;--text:#16202e;--muted:#5a6372;--line:#e1ddd5;
+  --brand:#0e1a2b;--brand-2:#16263d;--on-brand:#e9edf3;--on-brand-muted:#9aa6b8;
+  --accent:#a8834e;--accent-strong:#86663a;--on-accent:#fff;--accent-soft:#f1e8da;
+  --ok:#2f7a4f;--ok-soft:#e3f1e8;--warn:#9a6a12;--warn-soft:#f6ecd8;--bad:#a8432e;--bad-soft:#f7e3dc;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 8px 28px rgba(16,24,40,.07);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e0c0a;--surface:#16130f;--surface-2:#1e1a15;--text:#f1ebe2;--muted:#a99f92;--line:#2d2720;
+    --brand:#080706;--brand-2:#13110d;--on-brand:#f1ebe2;--on-brand-muted:#a99f92;
+    --accent:#c9a46a;--accent-strong:#dfbd84;--on-accent:#14110c;--accent-soft:#2b2317;
+    --ok:#6cc391;--ok-soft:#14281d;--warn:#e0b25c;--warn-soft:#2b2210;--bad:#e58a72;--bad-soft:#2e1812;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 34px rgba(0,0,0,.45);color-scheme:dark;
   }
+}
+:root[data-theme="dark"]{
+  --bg:#0e0c0a;--surface:#16130f;--surface-2:#1e1a15;--text:#f1ebe2;--muted:#a99f92;--line:#2d2720;
+  --brand:#080706;--brand-2:#13110d;--on-brand:#f1ebe2;--on-brand-muted:#a99f92;
+  --accent:#c9a46a;--accent-strong:#dfbd84;--on-accent:#14110c;--accent-soft:#2b2317;
+  --ok:#6cc391;--ok-soft:#14281d;--warn:#e0b25c;--warn-soft:#2b2210;--bad:#e58a72;--bad-soft:#2e1812;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 34px rgba(0,0,0,.45);color-scheme:dark;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+*{box-sizing:border-box;margin:0;padding:0}
+html{text-size-adjust:100%;-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15px;line-height:1.65;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
 
-  body {
-    background: var(--bg-base);
-    color: var(--text-primary);
-    font-family: 'IBM Plex Sans Arabic', sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
+/* ── Header ── */
+.top{position:sticky;top:0;z-index:20;background:var(--brand);color:var(--on-brand);border-bottom:1px solid rgba(241,235,226,.08)}
+.top-in{max-width:1240px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.logo{width:40px;height:40px;border-radius:11px;background:var(--brand-2);color:var(--accent);display:grid;place-items:center;flex:none;border:1px solid rgba(241,235,226,.1)}
+.logo svg{width:26px;height:26px}
+.logo .dot{fill:var(--on-brand)}
+.brand-name{font-weight:700;font-size:17px;letter-spacing:.4px}
+.brand-name b{color:var(--accent-strong)}
+.tool{border-inline-start:1px solid rgba(241,235,226,.14);padding-inline-start:14px;line-height:1.35}
+.tool strong{display:block;font-size:14px;font-weight:600}
+.tool span{font-size:12px;color:var(--on-brand-muted)}
+.top-actions{margin-inline-start:auto;display:flex;gap:8px;align-items:center}
+.icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid rgba(241,235,226,.14);background:transparent;color:var(--on-brand);display:grid;place-items:center;cursor:pointer}
+.icon-btn:hover{background:rgba(241,235,226,.06)}
+.icon-btn svg{width:18px;height:18px}
+.site-link{font-size:13px;color:var(--on-brand-muted);text-decoration:none;padding:8px 12px;border-radius:10px;border:1px solid rgba(241,235,226,.14)}
+.site-link:hover{color:var(--on-brand)}
+@media (max-width:640px){.tool span,.site-link{display:none}.tool{padding-inline-start:10px}}
 
-  /* ── Header ── */
-  .header {
-    border-bottom: 1px solid var(--border);
-    padding: 1.5rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--bg-card);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .header-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .logo-icon {
-    width: 32px; height: 32px;
-    background: var(--accent);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-  }
-  .header h1 {
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-  .header-sub {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 1px;
-  }
-  .header-badge {
-    font-size: 11px;
-    padding: 4px 10px;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    color: var(--text-secondary);
-  }
+/* ── Layout ── */
+.app{max-width:1240px;margin:0 auto;padding:24px 16px 120px;display:grid;gap:20px}
+@media (min-width:1020px){.app{grid-template-columns:minmax(0,1fr) 460px;align-items:start;padding-bottom:48px}}
 
-  /* ── Layout ── */
-  .page {
-    max-width: 820px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 4rem;
-  }
+.intro{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px}
+.intro h1{font-size:clamp(22px,3vw,30px);font-weight:700;line-height:1.3}
+.intro p{color:var(--muted);font-size:14px;margin-top:4px;max-width:60ch}
 
-  /* ── Section ── */
-  .section {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 1rem;
-    overflow: hidden;
-  }
-  .section-header {
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.15s;
-  }
-  .section-header:hover { background: rgba(255,255,255,0.02); }
-  .section-icon { font-size: 15px; }
-  .section-title {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    flex: 1;
-  }
-  .section-chevron {
-    color: var(--text-muted);
-    font-size: 11px;
-    transition: transform 0.2s;
-  }
-  .section.collapsed .section-chevron { transform: rotate(-90deg); }
-  .section-body {
-    padding: 1.25rem;
-    display: grid;
-    gap: 12px;
-  }
-  .section.collapsed .section-body { display: none; }
+/* ── Form cards ── */
+.form{display:grid;gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.card-h{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.step{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--accent-strong);background:var(--accent-soft);border-radius:8px;padding:3px 8px}
+.card-h h2{font-size:15px;font-weight:600}
+.card-h small{margin-inline-start:auto;color:var(--muted);font-size:12px}
+.card-b{padding:16px 18px;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.card-b .wide{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-size:12.5px;color:var(--muted);font-weight:500}
+.field input,.field select,.field textarea{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;font-size:14.5px;outline:none;transition:border-color .15s,box-shadow .15s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.field textarea{resize:vertical;min-height:76px;line-height:1.7}
+.field select{appearance:none;-webkit-appearance:none;padding-inline-start:12px;padding-inline-end:34px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16' fill='%23a8834e'%3E%3Cpath d='M7.25 11.1 2.45 5.66C1.9 5 2.35 4 3.2 4h9.6a1 1 0 0 1 .75 1.66l-4.8 5.48a1 1 0 0 1-1.5 0z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 12px center;cursor:pointer}
+.field .calc{background:transparent;border-style:dashed;color:var(--accent-strong);font-family:var(--mono);font-weight:500}
+.hidden{display:none!important}
 
-  /* ── Grid helpers ── */
-  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-  .g1 { display: grid; grid-template-columns: 1fr; gap: 12px; }
+/* ── Output panel ── */
+.out{position:relative}
+@media (min-width:1020px){.out{position:sticky;top:84px}}
+.out .card{display:flex;flex-direction:column;max-height:calc(100vh - 104px);overflow:hidden}
+@media (max-width:1019px){.out .card{max-height:none}}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:4px;margin:14px 18px 0}
+.seg button{border:0;background:transparent;border-radius:9px;padding:9px 8px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;line-height:1.35}
+.seg button small{display:block;font-weight:400;font-size:11.5px;opacity:.85}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+.checks{margin:12px 18px 0;display:grid;gap:6px}
+.chk{font-size:12.5px;border-radius:9px;padding:7px 10px;display:flex;gap:8px;align-items:flex-start;line-height:1.55}
+.chk::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;margin-top:7px;background:currentColor}
+.chk.ok{background:var(--ok-soft);color:var(--ok)}
+.chk.warn{background:var(--warn-soft);color:var(--warn)}
+.chk.bad{background:var(--bad-soft);color:var(--bad)}
+.prompt{margin:12px 18px 0;flex:1;min-height:240px;overflow:auto;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:13px;line-height:1.85;white-space:pre-wrap;word-break:break-word}
+.prompt[dir="ltr"]{font-family:var(--mono);font-size:12.5px;text-align:left}
+.out-f{display:flex;gap:8px;align-items:center;padding:14px 18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;padding:11px 18px;font-weight:600;font-size:14px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--text);text-decoration:none}
+.btn:hover{border-color:var(--accent)}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn-primary:hover{background:var(--accent-strong);border-color:var(--accent-strong)}
+.btn-primary.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed}
+.meta{margin-inline-start:auto;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
 
-  @media (max-width: 600px) {
-    .g2, .g3 { grid-template-columns: 1fr; }
-  }
+/* ── Mobile action bar ── */
+.mbar{position:fixed;inset-inline:0;bottom:0;z-index:15;background:var(--surface);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px}
+.mbar .btn{flex:1}
+@media (min-width:1020px){.mbar{display:none}}
 
-  /* ── Field ── */
-  .field { display: flex; flex-direction: column; gap: 6px; }
-  .field label {
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.03em;
-  }
-  input[type=text], input[type=number], select, textarea {
-    font-family: 'IBM Plex Sans Arabic', sans-serif;
-    font-size: 14px;
-    color: var(--text-primary);
-    background: var(--bg-input);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 9px 12px;
-    width: 100%;
-    transition: border-color 0.15s, background 0.15s;
-    outline: none;
-    direction: rtl;
-  }
-  input:hover, select:hover, textarea:hover { background: var(--bg-input-hover); }
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--border-focus);
-    background: var(--bg-input-hover);
-  }
-  select {
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: left 12px center;
-    padding-left: 32px;
-    cursor: pointer;
-  }
-  textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
-
-  /* ── Action bar ── */
-  .action-bar {
-    position: sticky;
-    bottom: 0;
-    background: var(--bg-base);
-    border-top: 1px solid var(--border);
-    padding: 1rem 1.5rem;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-  .btn {
-    font-family: 'IBM Plex Sans Arabic', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 10px 20px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .btn-primary {
-    background: var(--accent);
-    color: #111;
-    border-color: var(--accent);
-  }
-  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
-  .btn-secondary {
-    background: transparent;
-    color: var(--text-secondary);
-  }
-  .btn-secondary:hover { background: var(--bg-card); color: var(--text-primary); }
-  .copy-success {
-    font-size: 12px;
-    color: var(--success);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .copy-success.show { opacity: 1; }
-
-  /* ── Output ── */
-  .output-wrap {
-    margin-top: 1.5rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    display: none;
-  }
-  .output-wrap.visible { display: block; }
-  .output-header {
-    padding: 0.75rem 1.25rem;
-    background: var(--bg-card);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .output-title {
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  .output-body {
-    padding: 1.25rem;
-    background: #111;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    line-height: 1.8;
-    color: #bbb;
-    white-space: pre-wrap;
-    word-break: break-word;
-    direction: rtl;
-    text-align: right;
-    max-height: 500px;
-    overflow-y: auto;
-  }
-
-  /* ── Scrollbar ── */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #444; }
-
-  /* ── Divider ── */
-  .row-divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 4px 0;
-  }
-
-  /* ── Info chip ── */
-  .info-chip {
-    font-size: 11px;
-    color: var(--text-muted);
-    background: var(--accent-dim2);
-    border: 1px solid rgba(200,169,110,0.15);
-    border-radius: 20px;
-    padding: 3px 10px;
-    display: inline-block;
-  }
+footer{max-width:1240px;margin:0 auto;padding:8px 16px 32px;color:var(--muted);font-size:12.5px;display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between}
+footer a{color:var(--accent-strong);text-decoration:none}
+@media (max-width:1019px){footer{padding-bottom:96px}}
 </style>
 </head>
 <body>
 
-<header class="header">
-  <div class="header-logo">
-    <div class="logo-icon">🏛</div>
-    <div>
-      <div class="header h1" style="font-size:15px;font-weight:500;">مولّد البرومبت المعماري</div>
-      <div class="header-sub">Architectural Prompt Builder — v1.0</div>
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="https://af4ai.com/" aria-label="AF4AI">
+      <span class="logo" aria-hidden="true"><svg viewBox="-6 -6 256 202"><path fill="currentColor" d="M14 190 103 12H236L222 40H140.3L158 190H132L115.2 47.6 44 190ZM81 104H224L212 128H69Z"/><circle class="dot" cx="103" cy="12" r="12"/></svg></span>
+      <span class="brand-name" dir="ltr">AF<b>4</b>AI</span>
+    </a>
+    <div class="tool"><strong>مولّد برومبت الفيلا</strong><span>لوحة مساقط سكن فاخر · Villa Plan Prompt Builder v2</span></div>
+    <div class="top-actions">
+      <a class="site-link" href="https://af4ai.com/">af4ai.com</a>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="تبديل الوضع الفاتح والداكن" title="الوضع الفاتح / الداكن">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>
+      </button>
     </div>
   </div>
-  <div class="header-badge">السكن الفاخر · الخليج العربي</div>
 </header>
 
-<div class="page">
-
-  <!-- Section 1: Site -->
-  <div class="section" id="sec1">
-    <div class="section-header" onclick="toggleSection('sec1')">
-      <span class="section-icon">📍</span>
-      <span class="section-title">بيانات الموقع</span>
-      <span class="section-chevron">▾</span>
-    </div>
-    <div class="section-body">
-      <div class="g3">
-        <div class="field"><label>الدولة</label><input type="text" id="country" value="المملكة العربية السعودية"></div>
-        <div class="field"><label>المدينة</label><input type="text" id="city" value="الرياض"></div>
-        <div class="field"><label>الحي</label><input type="text" id="district" value="حي الياسمين"></div>
-      </div>
-      <div class="g3">
-        <div class="field"><label>المساحة (م²)</label><input type="number" id="area" value="600"></div>
-        <div class="field"><label>الطول / العمق (م)</label><input type="number" id="depth" value="30"></div>
-        <div class="field"><label>العرض / الواجهة (م)</label><input type="number" id="width" value="20"></div>
-      </div>
-      <div class="g2">
-        <div class="field"><label>الواجهات</label><input type="text" id="facades" value="شمالية شرقية + شمالية غربية"></div>
-        <div class="field"><label>عرض الشوارع</label><input type="text" id="street_width" value="شارعان بعرض 20م لكل منهما"></div>
-      </div>
+<main class="app">
+  <div class="intro">
+    <div>
+      <h1>برنامج الفيلا ← برومبت لوحة مساقط جاهز</h1>
+      <p>عدّل بيانات المشروع؛ البرومبت يُعاد تركيبه فوراً، والتحقق يكشف أي تعارض في الأرقام قبل النسخ.</p>
     </div>
   </div>
 
-  <!-- Section 2: Architecture -->
-  <div class="section" id="sec2">
-    <div class="section-header" onclick="toggleSection('sec2')">
-      <span class="section-icon">🏗️</span>
-      <span class="section-title">المواصفات المعمارية</span>
-      <span class="section-chevron">▾</span>
-    </div>
-    <div class="section-body">
-      <div class="g2">
-        <div class="field"><label>اسم صاحب المشروع</label><input type="text" id="owner" value="د. ابراهيم عبد الهادي"></div>
-        <div class="field"><label>الطراز المعماري</label><input type="text" id="style" value="هجين — عربي نجدي مع لمسات حديثة"></div>
+  <form class="form" id="form" autocomplete="off" onsubmit="return false">
+
+    <section class="card">
+      <div class="card-h"><span class="step">01</span><h2>الموقع وقطعة الأرض</h2></div>
+      <div class="card-b">
+        <div class="field"><label for="country">الدولة</label><input id="country" value="المملكة العربية السعودية"></div>
+        <div class="field"><label for="city">المدينة</label><input id="city" value="الرياض"></div>
+        <div class="field"><label for="district">الحي</label><input id="district" value="حي الياسمين"></div>
+        <div class="field"><label for="width">عرض الواجهة (م)</label><input id="width" type="number" min="1" step="0.5" value="20" inputmode="decimal"></div>
+        <div class="field"><label for="depth">العمق (م)</label><input id="depth" type="number" min="1" step="0.5" value="30" inputmode="decimal"></div>
+        <div class="field"><label for="area">المساحة (تُحسب تلقائياً)</label><input id="area" class="calc" readonly tabindex="-1" dir="ltr"></div>
+        <div class="field"><label for="facades">الواجهات</label><input id="facades" value="شمالية شرقية + شمالية غربية"></div>
+        <div class="field"><label for="street_width">الشوارع</label><input id="street_width" value="شارعان بعرض 20م لكل منهما"></div>
       </div>
-      <div class="g2">
-        <div class="field"><label>عدد الأدوار</label>
+    </section>
+
+    <section class="card">
+      <div class="card-h"><span class="step">02</span><h2>المواصفات المعمارية</h2></div>
+      <div class="card-b">
+        <div class="field"><label for="owner">اسم صاحب المشروع</label><input id="owner" value="د. ابراهيم عبد الهادي"></div>
+        <div class="field"><label for="style">الطراز المعماري</label><input id="style" value="هجين — عربي نجدي مع لمسات حديثة"></div>
+        <div class="field"><label for="floors">عدد الأدوار</label>
           <select id="floors">
-            <option value="G+1+R" selected>دورين + ملحق سطح (G+1+R)</option>
-            <option value="G+2+R">3 أدوار + ملحق سطح (G+2+R)</option>
-            <option value="G+1">دورين فقط (G+1)</option>
-            <option value="G only">دور أرضي فقط</option>
+            <option value="G">دور أرضي فقط</option>
+            <option value="G+1">دوران (G+1)</option>
+            <option value="G+1+R" selected>دوران + سطح (G+1+R)</option>
+            <option value="G+2+R">3 أدوار + سطح (G+2+R)</option>
           </select>
         </div>
-        <div class="field"><label>مصعد</label>
+        <div class="field"><label for="elevator">مصعد</label>
           <select id="elevator">
-            <option value="يستمر لجميع الأدوار" selected>يستمر لجميع الأدوار</option>
-            <option value="لا يوجد">لا يوجد</option>
+            <option value="yes" selected>نعم</option>
+            <option value="no">لا يوجد</option>
+          </select>
+        </div>
+        <div class="field"><label for="labels">لغة عناوين اللوحة</label>
+          <select id="labels">
+            <option value="ar" selected>عربي</option>
+            <option value="en">English (أدق في نماذج الصور)</option>
           </select>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Section 3: Ground Floor -->
-  <div class="section" id="sec3">
-    <div class="section-header" onclick="toggleSection('sec3')">
-      <span class="section-icon">🛋️</span>
-      <span class="section-title">متطلبات الدور الأرضي</span>
-      <span class="section-chevron">▾</span>
-    </div>
-    <div class="section-body">
-      <div class="g2">
-        <div class="field"><label>مجلس رجال</label>
+    <section class="card">
+      <div class="card-h"><span class="step">03</span><h2>برنامج الدور الأرضي</h2></div>
+      <div class="card-b">
+        <div class="field"><label for="mens">مجلس الرجال</label>
           <select id="mens">
-            <option value="مع مغاسل وحمام ومدخل مستقل وبوفيه" selected>مع مغاسل وحمام ومدخل مستقل وبوفيه</option>
-            <option value="مع مغاسل وحمام ومدخل مستقل">بدون بوفيه</option>
-            <option value="لا يوجد">لا يوجد</option>
+            <option value="مع مغاسل وحمام ومدخل مستقل وبوفيه" data-en="with wash basins, guest WC, separate entrance and buffet" selected>كامل + بوفيه</option>
+            <option value="مع مغاسل وحمام ومدخل مستقل" data-en="with wash basins, guest WC and separate entrance">كامل بدون بوفيه</option>
+            <option value="" data-en="">لا يوجد</option>
           </select>
         </div>
-        <div class="field"><label>مجلس نساء</label>
+        <div class="field"><label for="womens">مجلس النساء</label>
           <select id="womens">
-            <option value="مع مغاسل وحمام ومدخل مستقل" selected>مع مغاسل وحمام ومدخل مستقل</option>
-            <option value="لا يوجد">لا يوجد</option>
+            <option value="مع مغاسل وحمام ومدخل مستقل" data-en="with wash basins, WC and separate entrance" selected>كامل (مغاسل + حمام + مدخل)</option>
+            <option value="" data-en="">لا يوجد</option>
           </select>
         </div>
-      </div>
-      <div class="g3">
-        <div class="field"><label>غرف الخدمة</label>
+        <div class="field"><label for="service">غرف الخدمة</label>
           <select id="service">
-            <option value="غرفة خادمة + حمام + غرفة سائق + حمام + غسيل" selected>كامل (خادمة + سائق + غسيل)</option>
-            <option value="غرفة خادمة + حمام + غسيل">بدون سائق</option>
-            <option value="غرفة غسيل فقط">غسيل فقط</option>
+            <option value="غرفة خادمة بحمام + غرفة سائق بحمام + غرفة غسيل" data-en="maid room with bathroom, driver room with bathroom, laundry" selected>كاملة (خادمة + سائق + غسيل)</option>
+            <option value="غرفة خادمة بحمام + غرفة غسيل" data-en="maid room with bathroom, laundry">بدون سائق</option>
+            <option value="غرفة غسيل فقط" data-en="laundry room only">غسيل فقط</option>
           </select>
         </div>
-        <div class="field"><label>كراج</label>
+        <div class="field"><label for="garage">الكراج</label>
           <select id="garage">
-            <option value="داخلي يتسع لسيارتين" selected>سيارتان</option>
-            <option value="داخلي يتسع لسيارة واحدة">سيارة واحدة</option>
-            <option value="داخلي يتسع لثلاث سيارات">3 سيارات</option>
+            <option value="1" >سيارة واحدة</option>
+            <option value="2" selected>سيارتان</option>
+            <option value="3">3 سيارات</option>
           </select>
         </div>
-        <div class="field"><label>مكتب ومكتبة</label>
+        <div class="field"><label for="office">مكتب ومكتبة</label>
           <select id="office">
-            <option value="مكتب مع مكتبة ملحقة" selected>نعم</option>
-            <option value="مكتب فقط">مكتب فقط</option>
-            <option value="لا يوجد">لا يوجد</option>
+            <option value="مكتب مع مكتبة ملحقة" data-en="study with attached library" selected>مكتب + مكتبة</option>
+            <option value="مكتب فقط" data-en="study">مكتب فقط</option>
+            <option value="" data-en="">لا يوجد</option>
           </select>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Section 4: First Floor -->
-  <div class="section" id="sec4">
-    <div class="section-header" onclick="toggleSection('sec4')">
-      <span class="section-icon">🛏️</span>
-      <span class="section-title">متطلبات الدور الأول</span>
-      <span class="section-chevron">▾</span>
-    </div>
-    <div class="section-body">
-      <div class="g3">
-        <div class="field"><label>عدد غرف النوم الإجمالي</label><input type="number" id="bedrooms" value="5" min="2" max="10"></div>
-        <div class="field"><label>أجنحة ماستر</label><input type="number" id="master" value="2" min="1" max="4"></div>
-        <div class="field"><label>غرف بحمامات مشتركة</label><input type="number" id="shared_bath" value="2" min="0" max="6"></div>
-      </div>
-      <div class="g2">
-        <div class="field"><label>غرفة ألعاب أطفال</label>
-          <select id="playroom">
-            <option value="نعم" selected>نعم</option>
-            <option value="لا">لا</option>
-          </select>
+    <section class="card">
+      <div class="card-h"><span class="step">04</span><h2 id="bed-title">غرف النوم والدور الأول</h2><small id="bed-sum"></small></div>
+      <div class="card-b">
+        <div class="field"><label for="bedrooms">إجمالي غرف النوم</label><input id="bedrooms" type="number" min="1" max="12" value="5" inputmode="numeric"></div>
+        <div class="field"><label for="master">منها أجنحة ماستر</label><input id="master" type="number" min="0" max="6" value="2" inputmode="numeric"></div>
+        <div class="field"><label for="shared_bath">منها غرف بحمام مشترك</label><input id="shared_bath" type="number" min="0" max="10" value="2" inputmode="numeric"></div>
+        <div class="field"><label for="playroom">غرفة ألعاب أطفال</label>
+          <select id="playroom"><option value="1" selected>نعم</option><option value="0">لا</option></select>
         </div>
-        <div class="field"><label>صالة عائلية علوية</label>
-          <select id="family_lounge">
-            <option value="نعم" selected>نعم</option>
-            <option value="لا">لا</option>
-          </select>
+        <div class="field"><label for="family_lounge">صالة عائلية علوية</label>
+          <select id="family_lounge"><option value="1" selected>نعم</option><option value="0">لا</option></select>
+        </div>
+        <div class="field wide hidden" id="second-wrap"><label for="second_floor">برنامج الدور الثاني</label>
+          <textarea id="second_floor">جناح ضيوف مستقل + صالة جلوس + غرفة رياضة</textarea>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Section 5: Extra -->
-  <div class="section" id="sec5">
-    <div class="section-header" onclick="toggleSection('sec5')">
-      <span class="section-icon">⚙️</span>
-      <span class="section-title">ملاحظات خاصة</span>
-      <span class="section-chevron">▾</span>
-    </div>
-    <div class="section-body">
-      <div class="g1">
-        <div class="field">
-          <label>متطلبات إضافية أو اشتراطات خاصة</label>
+    <section class="card">
+      <div class="card-h"><span class="step">05</span><h2>ملاحظات واشتراطات خاصة</h2><small>اختياري</small></div>
+      <div class="card-b">
+        <div class="field wide"><label for="extra">متطلبات إضافية</label>
           <textarea id="extra">إمكانية التوسع المستقبلي أو تحويل إحدى الغرف الأرضية إلى جناح مستقل لكبار السن</textarea>
         </div>
       </div>
+    </section>
+  </form>
+
+  <aside class="out" id="out" aria-label="البرومبت الناتج">
+    <div class="card">
+      <div class="card-h"><span class="step">AI</span><h2>البرومبت الجاهز</h2><small id="target-hint"></small></div>
+      <div class="seg" role="group" aria-label="نوع المخرج">
+        <button type="button" data-mode="brief" aria-pressed="true">موجّه تصميم<small>Claude · ChatGPT · Gemini</small></button>
+        <button type="button" data-mode="image" aria-pressed="false">برومبت صورة مباشر<small>Nano Banana Pro · GPT Image</small></button>
+      </div>
+      <div class="checks" id="checks" aria-live="polite"></div>
+      <div class="prompt" id="output" tabindex="0"></div>
+      <div class="out-f">
+        <button class="btn btn-primary" type="button" id="copy-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
+          <span>نسخ البرومبت</span>
+        </button>
+        <button class="btn" type="button" id="dl-btn" title="تنزيل كملف نصي">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>
+          <span>.txt</span>
+        </button>
+        <span class="meta" id="meta"></span>
+      </div>
     </div>
-  </div>
+  </aside>
+</main>
 
-  <!-- Output -->
-  <div class="output-wrap" id="output-wrap">
-    <div class="output-header">
-      <span class="output-title">البرومبت الجاهز للنسخ</span>
-      <span class="info-chip">جاهز للصق في Claude أو ChatGPT</span>
-    </div>
-    <div class="output-body" id="output"></div>
-  </div>
-
-</div><!-- /page -->
-
-<!-- Sticky action bar -->
-<div class="action-bar">
-  <button class="btn btn-primary" onclick="generatePrompt()">
-    <span>توليد البرومبت</span>
-    <span>↗</span>
-  </button>
-  <button class="btn btn-secondary" onclick="copyPrompt()">
-    <span>نسخ النص</span>
-  </button>
-  <div class="copy-success" id="copy-badge">
-    <span>✓</span><span>تم النسخ</span>
-  </div>
+<div class="mbar">
+  <a class="btn" href="#out">عرض البرومبت</a>
+  <button class="btn btn-primary" type="button" id="copy-btn-m">نسخ</button>
 </div>
 
+<footer>
+  <span>تصميم وتطوير: م. أحمد الفولي — <a href="https://af4ai.com/">AF4AI</a></span>
+  <span>كل الحسابات تتم داخل المتصفح؛ لا تُرسل بياناتك لأي خادم.</span>
+</footer>
+
 <script>
-function toggleSection(id) {
-  document.getElementById(id).classList.toggle('collapsed');
-}
-
-function v(id) { return document.getElementById(id).value.trim(); }
-
-function generatePrompt() {
-  const owner       = v('owner');
-  const country     = v('country');
-  const city        = v('city');
-  const district    = v('district');
-  const area        = v('area');
-  const depth       = v('depth');
-  const width       = v('width');
-  const facades     = v('facades');
-  const streetWidth = v('street_width');
-  const archStyle   = v('style');
-  const floors      = v('floors');
-  const elevator    = v('elevator');
-  const mens        = v('mens');
-  const womens      = v('womens');
-  const service     = v('service');
-  const garage      = v('garage');
-  const office      = v('office');
-  const bedrooms    = v('bedrooms');
-  const master      = v('master');
-  const sharedBath  = v('shared_bath');
-  const playroom    = v('playroom');
-  const familyLounge= v('family_lounge');
-  const extra       = v('extra');
-
-  const prompt = `أنت كبير المصممين في مكتب معماري متخصص في السكن الفاخر في منطقة الخليج العربي.
-
-══════════════════════════════════════
-[ متغيرات المشروع — كل التعديلات هنا ]
-══════════════════════════════════════
-
--- بيانات الموقع --
-OWNER_NAME     = "${owner}"
-COUNTRY        = "${country}"
-CITY           = "${city}"
-DISTRICT       = "${district}"
-PLOT_AREA      = "${area} م²"
-PLOT_DEPTH     = "${depth} م"
-PLOT_WIDTH     = "${width} م"
-PLOT_SHAPE     = "مستطيلة منتظمة"
-FACADES        = "${facades}"
-STREET_WIDTH   = "${streetWidth}"
-
--- المواصفات المعمارية --
-ARCH_STYLE     = "${archStyle}"
-FLOORS         = "${floors}"
-ELEVATOR       = "${elevator}"
-
--- برنامج الدور الأرضي --
-MENS_MAJLIS    = "${mens}"
-WOMENS_MAJLIS  = "${womens}"
-DINING_ROOM    = "غرفة طعام مستقلة تخدم كلا المجلسين والعائلة"
-FAMILY_HALL    = "صالة عائلية مركزية — تهوية متقاطعة + إطلالة على الفناء أو الحديقة — يمكن أن تكون مزدوجة الارتفاع"
-OFFICE         = "${office}"
-KITCHEN        = "مطبخ رئيسي مع مخزن"
-SERVICE_ROOMS  = "${service} — مدخل خدمة مستقل من الشارع"
-GARAGE         = "كراج ${garage}"
-GARDENS        = "حديقة أمامية وخلفية + جلسات خارجية منسقة"
-
--- برنامج الدور الأول --
-TOTAL_BEDROOMS  = "${bedrooms} غرف نوم"
-MASTER_SUITES   = "${master} أجنحة ماستر (غرفة نوم + ملابس + حمام واسع)"
-SHARED_BATH_BR  = "${sharedBath} غرف بحمام مشترك"
-PLAYROOM        = "غرفة ألعاب: ${playroom}"
-FAMILY_LOUNGE   = "صالة عائلية علوية: ${familyLounge}"
-BED_ORIENTATION = "توجيه غرف النوم للجهة الشمالية الشرقية — حماية من شمس الغرب"
-
--- ملحق السطح --
-ROOF_PROGRAM   = "فراغ متعدد الاستخدامات + Roof Garden/Terrace + جلسات مظللة بمظلات نجدية مطورة"
-
--- أولويات التصميم --
-PRIVACY_LEVEL  = "عالٍ جداً"
-USAGE_MODE     = "سكن دائم + استقبال ضيوف بكثرة"
-CIRCULATION    = "فصل تام: حركة الضيوف / العائلة / الخدمة"
-EXTRA_NOTES    = "${extra}"
-
-══════════════════════════════════════
-[ محرك التصميم — لا تعدّل هذا القسم ]
-══════════════════════════════════════
-
-أولاً — التحليل الداخلي الصامت الإجباري:
-قبل رسم أي خط، نفّذ داخلياً وبصمت التحليل التالي وترجمه مباشرة إلى قرارات تصميمية مرئية في المخطط:
-- الموقع: شكل الأرض وأبعادها، توجيه الواجهات، أفضل نقاط الدخول للضيوف والعائلة والخدمة، الخصوصية البصرية مع الجيران.
-- المناخ: مسار الشمس، تأثير شمس العصر الغربية، اتجاه الرياح، فرص التهوية الطبيعية المتقاطعة (Cross Ventilation).
-- العمران: طبيعة حي الياسمين، الكثافة، القيمة السكنية.
-- الوظيفة: توزيع فراغي يحقق فصل الضيافة عن العائلة وتقليل التعرض الحراري لغرف النوم.
-
-ثانياً — قواعد الكتلة والإنشاء (MUST):
-- الكتلة منطقية وقابلة للبناء: لا زوايا حادة، لا غرف مثلثة، لا انكسارات غير مبررة.
-- تطابق الأدوار: الدور الأول امتداد مباشر للأرضي — أي نقص مبرر معمارياً فقط (تراس / فناء / فراغ مزدوج).
-- تطابق المحاور: الجدران والأعمدة تستمر بين الأدوار.
-- تطابق العناصر الرأسية: المصاعد والسلالم والحمامات في نفس المكان في كل الأدوار.
-- ثبات الارتدادات: منطقية وثابتة — عدم الانتظام يُمتص في الحدائق لا في الغرف.
-
-ثالثاً — المخرج النهائي — لوحة عرض واحدة:
-لوحة مخطط معماري احترافية واحدة تشمل:
-- [يسار] مخطط الدور الأرضي
-- [وسط] مخطط الدور الأول
-- [يمين] مخطط ملحق السطح + تنسيق الموقع
-
-مواصفات الإظهار:
-- أسلوب: CAD نظيف — Presentation Floor Plans كمخرجات المكاتب الهندسية الكبرى.
-- الأرضيات: تهشير (Hatching) خفيف واقعي يميز الفراغات.
-- الأثاث: بلوكات CAD قياسية في جميع الفراغات لإظهار المقياس والاستخدام.
-- الجدران: خارجية 25-30cm (Double Line)، داخلية 15-20cm.
-- الفتحات: أبواب بفتحاتها الكاملة، نوافذ بزجاجها (Double Line).
-- الأعمدة: نقاط سوداء مهشرة.
-- عنوان اللوحة: مشروع فيلا ${owner} — ${city} — ${district}.
-- عناوين الأدوار بالعربية + سهم الشمال + مقياس رسم بياني + أبعاد الأرض + الارتدادات النظامية.
-
-الناتج الوحيد المقبول: اللوحة المعمارية فقط — بدون مقدمة، بدون خاتمة، بدون شرح.`;
-
-  document.getElementById('output').textContent = prompt;
-  const wrap = document.getElementById('output-wrap');
-  wrap.classList.add('visible');
-  wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function copyPrompt() {
-  const text = document.getElementById('output').textContent;
-  if (!text) { generatePrompt(); return; }
-  navigator.clipboard.writeText(text).then(() => {
-    const badge = document.getElementById('copy-badge');
-    badge.classList.add('show');
-    setTimeout(() => badge.classList.remove('show'), 2000);
+/* ───────── Theme ───────── */
+(function(){
+  const root=document.documentElement;
+  let saved=null;try{saved=localStorage.getItem('af4ai-theme')}catch(e){}
+  if(saved==='light'||saved==='dark')root.setAttribute('data-theme',saved);
+  document.getElementById('theme-btn').addEventListener('click',()=>{
+    const cur=root.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    const next=cur==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem('af4ai-theme',next)}catch(e){}
   });
+})();
+
+/* ───────── Helpers ───────── */
+const $=id=>document.getElementById(id);
+const val=id=>$(id).value.trim();
+const num=id=>{const n=parseFloat($(id).value);return Number.isFinite(n)?n:NaN};
+const enOpt=id=>{const o=$(id).selectedOptions[0];return o?(o.dataset.en||''):''};
+const fmt=n=>Number.isInteger(n)?String(n):n.toFixed(1).replace(/\.0$/,'');
+const AR_COUNT={1:'سيارة واحدة',2:'سيارتين',3:'ثلاث سيارات'};
+
+let mode='brief';
+
+/* ───────── Read + validate state ───────── */
+function readState(){
+  const s={
+    country:val('country'),city:val('city'),district:val('district'),
+    width:num('width'),depth:num('depth'),facades:val('facades'),streets:val('street_width'),
+    owner:val('owner'),style:val('style'),floors:$('floors').value,elevator:$('elevator').value==='yes',
+    labels:$('labels').value,
+    mens:val('mens'),mensEn:enOpt('mens'),womens:val('womens'),womensEn:enOpt('womens'),
+    service:val('service'),serviceEn:enOpt('service'),garage:+$('garage').value,
+    office:val('office'),officeEn:enOpt('office'),
+    bedrooms:num('bedrooms'),master:num('master'),shared:num('shared_bath'),
+    playroom:$('playroom').value==='1',lounge:$('family_lounge').value==='1',
+    second:val('second_floor'),extra:val('extra')
+  };
+  s.area=(s.width>0&&s.depth>0)?s.width*s.depth:NaN;
+  s.hasFirst=s.floors!=='G';
+  s.hasSecond=s.floors==='G+2+R';
+  s.hasRoof=s.floors.endsWith('+R');
+  s.ensuite=s.bedrooms-s.master-s.shared;
+  return s;
 }
+
+function validate(s){
+  const c=[];
+  if(!(s.width>0&&s.depth>0))c.push(['bad','أدخل عرض وعمق الأرض بأرقام موجبة.']);
+  else{
+    const ratio=Math.max(s.width,s.depth)/Math.min(s.width,s.depth);
+    if(ratio>4)c.push(['warn',`نسبة أبعاد الأرض ${fmt(ratio)}:1 — أرض شديدة الاستطالة، راجع الأبعاد.`]);
+  }
+  ['bedrooms','master','shared'].forEach(k=>{if(!Number.isInteger(s[k])||s[k]<0)c.push(['bad','أعداد غرف النوم يجب أن تكون أعداداً صحيحة.'])});
+  if(Number.isInteger(s.bedrooms)&&s.ensuite<0)c.push(['bad',`مجموع الماستر (${s.master}) والغرف المشتركة (${s.shared}) أكبر من إجمالي غرف النوم (${s.bedrooms}).`]);
+  if(s.shared===1)c.push(['warn','غرفة واحدة "بحمام مشترك" لا تشترك مع غيرها — اجعلها 0 أو 2 فأكثر.']);
+  if(!s.mens&&!s.womens)c.push(['warn','لا يوجد مجلس رجال ولا نساء — تأكد أن هذا مقصود في سكن ضيافة.']);
+  if(s.floors==='G'&&s.bedrooms>4)c.push(['warn','5 غرف نوم فأكثر في دور أرضي واحد تحتاج أرضاً واسعة — راجع المساحة.']);
+  if(!s.owner||!s.city)c.push(['warn','اسم المالك والمدينة يظهران في عنوان اللوحة — يفضل تعبئتهما.']);
+  if(!c.some(x=>x[0]==='bad'))c.unshift(['ok',`البيانات متسقة: ${fmt(s.width)}×${fmt(s.depth)}م = ${fmt(s.area)}م² · ${s.bedrooms} غرف نوم.`]);
+  /* dedupe */
+  return c.filter((x,i,a)=>a.findIndex(y=>y[1]===x[1])===i);
+}
+
+/* ───────── Shared derived program ───────── */
+function bedroomLinesAr(s){
+  const l=[`${s.bedrooms} غرف نوم إجمالاً`];
+  if(s.master>0)l.push(`${s.master} أجنحة ماستر (غرفة نوم + غرفة ملابس + حمام واسع)`);
+  if(s.ensuite>0)l.push(`${s.ensuite} غرف بحمام خاص داخلي`);
+  if(s.shared>0)l.push(`${s.shared} غرف تتشارك حماماً من الممر`);
+  return l.join(' — ');
+}
+function panelsAr(s){
+  const p=['مخطط الدور الأرضي مع تنسيق الموقع والارتدادات'];
+  if(s.hasFirst)p.push('مخطط الدور الأول');
+  if(s.hasSecond)p.push('مخطط الدور الثاني');
+  if(s.hasRoof)p.push('مخطط ملحق السطح');
+  return p;
+}
+const floorsAr={'G':'دور أرضي فقط','G+1':'دوران (أرضي + أول)','G+1+R':'دوران + ملحق سطح','G+2+R':'ثلاثة أدوار + ملحق سطح'};
+
+/* ───────── Mode 1: design brief for chat models (Arabic) ───────── */
+function buildBrief(s){
+  const bedFloor=s.hasFirst?'الدور الأول':'الدور الأرضي (جناح نوم معزول عن الضيافة)';
+  const upper=[];
+  upper.push(`- غرف النوم: ${bedroomLinesAr(s)}.`);
+  if(s.playroom)upper.push('- غرفة ألعاب أطفال.');
+  if(s.lounge&&s.hasFirst)upper.push('- صالة عائلية علوية تفتح عليها غرف النوم.');
+  upper.push('- توجيه غرف النوم بعيداً عن شمس الغرب، وتفضيل الواجهات الشمالية والشمالية الشرقية.');
+
+  const ground=[];
+  if(s.mens)ground.push(`- مجلس رجال ${s.mens}.`);
+  if(s.womens)ground.push(`- مجلس نساء ${s.womens}.`);
+  ground.push(`- غرفة طعام رسمية تخدم ${s.mens||s.womens?'المجالس والعائلة':'العائلة'}.`);
+  ground.push('- صالة عائلية مركزية بتهوية متقاطعة وإطلالة على الحديقة أو الفناء، ويمكن أن تكون مزدوجة الارتفاع.');
+  if(s.office)ground.push(`- ${s.office}.`);
+  ground.push('- مطبخ رئيسي مع مخزن، متصل مباشرة بمنطقة الخدمة.');
+  ground.push(`- ${s.service}، بمدخل خدمة مستقل من الشارع.`);
+  ground.push(`- كراج داخلي يتسع لـ${AR_COUNT[s.garage]}.`);
+  ground.push('- حديقة أمامية وخلفية مع جلسات خارجية.');
+  if(!s.hasFirst)ground.push(...upper);
+
+  const vertical=s.elevator?'السلالم والمصعد والحمامات':'السلالم والحمامات';
+  const panels=panelsAr(s);
+  const labelLang=s.labels==='en'?'بالإنجليزية':'بالعربية';
+
+  let t=`أنت كبير المصممين في مكتب معماري متخصص في السكن الفاخر بالخليج العربي. مهمتك إنتاج لوحة مساقط معمارية واحدة لفيلا وفق البيانات التالية. البيانات ثابتة؛ لا تغيّر أي رقم فيها.
+
+## بيانات المشروع
+- المالك: ${s.owner||'—'}
+- الموقع: ${[s.district,s.city,s.country].filter(Boolean).join('، ')}
+- قطعة الأرض: مستطيلة منتظمة، عرض الواجهة ${fmt(s.width)} م × العمق ${fmt(s.depth)} م = ${fmt(s.area)} م²
+- الواجهات: ${s.facades||'—'}
+- الشوارع: ${s.streets||'—'}
+- الطراز: ${s.style||'معاصر'}
+- الأدوار: ${floorsAr[s.floors]}${s.hasFirst?(s.elevator?' — مع مصعد يخدم جميع الأدوار':' — بدون مصعد'):''}
+
+## البرنامج الفراغي
+### الدور الأرضي
+${ground.join('\n')}
+`;
+  if(s.hasFirst)t+=`
+### الدور الأول
+${upper.join('\n')}
+`;
+  if(s.hasSecond)t+=`
+### الدور الثاني
+- ${s.second||'استكمال البرنامج بما يتسق مع الدور الأول'}.
+`;
+  if(s.hasRoof)t+=`
+### ملحق السطح
+- فراغ متعدد الاستخدامات + تراس وحديقة سطح + جلسات مظللة بمظلات مستوحاة من الطراز المختار.
+- مساحة الملحق لا تتجاوز ربع مساحة السطح تقريباً، والباقي تراس مكشوف.
+`;
+  t+=`
+### أولويات التصميم
+- خصوصية عالية جداً، وسكن دائم مع استقبال ضيوف بكثرة.
+- فصل تام بين ثلاث حركات: الضيوف / العائلة / الخدمة، لكل منها مدخلها.${s.extra?`\n- ${s.extra}.`:''}
+
+## خطوات العمل
+1. حلّل داخلياً قبل الرسم: أبعاد الأرض وتوجيهها، أفضل نقاط الدخول للحركات الثلاث، مسار الشمس وشمس العصر الغربية، اتجاه الرياح والتهوية المتقاطعة، الخصوصية البصرية مع الجيران، وطبيعة ${s.district||'الحي'}. حوّل نتائج التحليل إلى قرارات ظاهرة في المخطط، ولا تكتب التحليل في المخرج.
+2. التزم بقواعد الكتلة والإنشاء:
+   - كتلة منطقية قابلة للبناء: زوايا قائمة، بلا غرف مثلثة أو انكسارات غير مبررة.${s.hasFirst?`
+   - الأدوار العليا امتداد مباشر للأرضي؛ أي تراجع يكون لسبب معماري واضح (تراس، فناء، فراغ مزدوج).
+   - الجدران والأعمدة على محاور واحدة بين الأدوار.
+   - ${vertical} في الموقع نفسه في كل الأدوار.`:''}
+   - ارتدادات منتظمة ثابتة؛ أي فرق في الأرض يُمتص في الحدائق لا في الغرف.
+3. أنتج لوحة عرض واحدة أفقية تضم ${panels.length===1?'المسقط التالي':`${panels.length} مساقط متجاورة بالترتيب`}: ${panels.join('، ثم ')}.
+
+## مواصفات الإظهار
+- خطوط CAD نظيفة بالأسود على خلفية بيضاء، بأسلوب مساقط العرض في المكاتب الهندسية الكبرى.
+- الجدران الخارجية 25–30 سم بخط مزدوج، والداخلية 15–20 سم.
+- الأبواب بقوس فتحها كاملاً، والنوافذ بخط مزدوج يُظهر الزجاج، والأعمدة مربعات مصمتة.
+- تهشير خفيف للأرضيات يميز الفراغات، وبلوكات أثاث CAD قياسية في كل فراغ.
+- أسماء الفراغات ${labelLang}، مع سهم الشمال ومقياس رسم بياني وأبعاد الأرض والارتدادات.
+- عنوان اللوحة: "فيلا ${s.owner||''} — ${s.city||''}${s.district?' — '+s.district:''}".
+
+المخرج المطلوب: اللوحة فقط، بلا مقدمة ولا خاتمة ولا شرح.`;
+  return t;
+}
+
+/* ───────── Mode 2: direct image prompt (English, natural language) ───────── */
+function buildImage(s){
+  const en=s.labels==='en';
+  const floorsEn={'G':'single-storey','G+1':'two-storey','G+1+R':'two-storey villa with a roof annex','G+2+R':'three-storey villa with a roof annex'}[s.floors];
+  const panels=['ground floor plan with site landscaping and setbacks'];
+  if(s.hasFirst)panels.push('first floor plan');
+  if(s.hasSecond)panels.push('second floor plan');
+  if(s.hasRoof)panels.push('roof annex plan');
+
+  const g=[];
+  if(s.mensEn)g.push(`a men's majlis ${s.mensEn}`);
+  if(s.womensEn)g.push(`a women's majlis ${s.womensEn}`);
+  g.push('a formal dining room','a central double-height family hall with cross ventilation facing the garden');
+  if(s.hasFirst)g.push(s.elevator?'a stair core with an elevator serving all floors':'a stair core');
+  if(s.officeEn)g.push(`a ${s.officeEn}`);
+  g.push('a main kitchen with pantry linked to the service zone',`a service wing (${s.serviceEn}) reached by its own service entrance from the street`,`an internal garage for ${s.garage} car${s.garage>1?'s':''}`,'front and rear gardens with outdoor seating');
+
+  const beds=[];
+  if(s.master>0)beds.push(`${s.master} master suite${s.master>1?'s':''} each with walk-in closet and large bathroom`);
+  if(s.ensuite>0)beds.push(`${s.ensuite} bedroom${s.ensuite>1?'s':''} with en-suite bathroom`);
+  if(s.shared>0)beds.push(`${s.shared} bedrooms sharing a corridor bathroom`);
+  const up=[`${s.bedrooms} bedrooms in total: ${beds.join(', ')}`];
+  if(s.playroom)up.push("a children's playroom");
+  if(s.lounge&&s.hasFirst)up.push('an upper family lounge that the bedrooms open onto');
+
+  const title=(en?`Villa ${s.owner||''} — ${s.city||''}`:`فيلا ${s.owner||''} — ${s.city||''}`).replace(/\s+—\s*$/,'');
+  let p=`A single landscape architectural presentation board (3:2) showing ${panels.length} orthographic top-down floor plans side by side: ${panels.join(', ')}. Black CAD linework on a pure white background, in the style of presentation drawings from a top architecture firm.
+
+Project: a luxury ${floorsEn} in ${[s.district,s.city,s.country].filter(Boolean).join(', ')}, style "${s.style||'contemporary'}". Rectangular plot ${fmt(s.width)} m wide by ${fmt(s.depth)} m deep (${fmt(s.area)} m²), frontages ${s.facades}, streets: ${s.streets}.
+
+Ground floor: ${g.join('; ')}${s.hasFirst?'':`; ${up.join('; ')}`}. Guest, family and service circulation are fully separated, each with its own entrance.`;
+  if(s.hasFirst)p+=`\n\nFirst floor: ${up.join('; ')}. Bedrooms face north and north-east, away from the western sun.`;
+  if(s.hasSecond)p+=`\n\nSecond floor: ${s.second}.`;
+  if(s.hasRoof)p+=`\n\nRoof annex: a multi-purpose room covering about a quarter of the roof, with the rest as an open roof terrace and garden with shaded seating.`;
+  p+=`\n\nDrafting conventions: exterior walls as thick double lines (25–30 cm), interior walls thinner (15–20 cm); doors drawn with full swing arcs; windows as double lines with glazing; columns as solid filled squares on a regular grid. ${s.hasFirst?`Walls, columns, stairs${s.elevator?', the elevator':''} and wet areas align vertically in the same position on every floor. `:''}Light floor hatching distinguishes rooms; standard CAD furniture blocks in every room show scale. Every room is labelled in ${en?'English':'Arabic'}, with a north arrow, a graphic scale bar, plot dimensions and setbacks. Title block text: "${title}".
+
+Keep every drawing strictly two-dimensional and monochrome: flat plan view only, clean and evenly weighted lines.`;
+  if(s.extra)p+=`\n\nAdditional client requirement (in Arabic): ${s.extra}`;
+  return p;
+}
+
+/* ───────── Render ───────── */
+function render(){
+  const s=readState();
+  $('area').value=Number.isFinite(s.area)?`${fmt(s.area)} m²`:'—';
+  $('second-wrap').classList.toggle('hidden',!s.hasSecond);
+  $('bed-title').textContent=s.hasFirst?'غرف النوم والدور الأول':'غرف النوم (في الدور الأرضي)';
+  $('family_lounge').disabled=!s.hasFirst;
+  $('bed-sum').textContent=Number.isInteger(s.ensuite)&&s.ensuite>=0?`ماستر ${s.master} · خاص ${s.ensuite} · مشترك ${s.shared}`:'';
+
+  const checks=validate(s);
+  const blocked=checks.some(c=>c[0]==='bad');
+  $('checks').innerHTML=checks.map(([k,m])=>`<div class="chk ${k}">${m.replace(/</g,'&lt;')}</div>`).join('');
+
+  const out=$('output');
+  const text=blocked?'':(mode==='brief'?buildBrief(s):buildImage(s));
+  out.textContent=blocked?'صحّح الأخطاء المشار إليها بالأعلى ليظهر البرومبت.':text;
+  out.setAttribute('dir',mode==='image'&&!blocked?'ltr':'rtl');
+  out.dataset.text=text;
+  $('target-hint').textContent=mode==='brief'?'عربي':'English';
+  $('meta').textContent=text?`${text.split(/\s+/).filter(Boolean).length} كلمة`:'';
+  ['copy-btn','copy-btn-m','dl-btn'].forEach(id=>$(id).disabled=blocked);
+}
+
+/* ───────── Actions ───────── */
+async function copyOut(btn){
+  const t=$('output').dataset.text;if(!t)return;
+  try{await navigator.clipboard.writeText(t)}catch(e){
+    const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();
+  }
+  const label=btn.querySelector('span')||btn;const old=label.textContent;
+  btn.classList.add('done');label.textContent='تم النسخ ✓';
+  setTimeout(()=>{btn.classList.remove('done');label.textContent=old},1800);
+}
+function download(){
+  const t=$('output').dataset.text;if(!t)return;
+  const s=readState();
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([t],{type:'text/plain;charset=utf-8'}));
+  a.download=`villa-prompt-${mode}-${(s.city||'project').replace(/\s+/g,'-')}.txt`;
+  a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
+  mode=b.dataset.mode;
+  document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
+  render();
+}));
+$('form').addEventListener('input',render);
+$('form').addEventListener('change',render);
+$('copy-btn').addEventListener('click',e=>copyOut(e.currentTarget));
+$('copy-btn-m').addEventListener('click',e=>copyOut(e.currentTarget));
+$('dl-btn').addEventListener('click',download);
+render();
 </script>
 </body>
 </html>
